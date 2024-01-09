@@ -66,7 +66,7 @@ torch.backends.cudnn.benchmark = False
 torch.use_deterministic_algorithms(True)
 
 pipe = StableDiffusionPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5", safety_checker=None
+    "runwayml/stable-diffusion-v1-5", safety_checker=None, torch_dtype=torch.float16
 )
 pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
 pipe.unet.set_default_attn_processor()
