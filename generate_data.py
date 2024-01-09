@@ -11,15 +11,18 @@ torch.backends.cudnn.benchmark = False
 torch.use_deterministic_algorithms(True)
 
 pipe = StableDiffusionPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16, safety_checker=None
+    "runwayml/stable-diffusion-v1-5", safety_checker=None
 )
 pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
+print("Disable xformers memory efficient attention")
+pipe.unet.set_default_attn_processor()
+pipe.vae.set_default_attn_processor()
+pipe.disable_xformers_memory_efficient_attention()
 pipe.to("cuda")
 
 for i in range(N_IMAGES):
-    generator = torch.manual_seed(i)
+    generator = torch.Generator().manual_seed(i)
     result = pipe(PROMPT, generator=generator, num_inference_steps=STEPS)
     images = result.images
     images[0].save(f"images/{i}.png")
     print(i)
-    
