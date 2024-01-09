@@ -53,7 +53,7 @@ for i in range(N_IMAGES):
     image = result.images[0]
     ref_hash = imagehash.average_hash(ref_image)
     hash = imagehash.average_hash(image)
-    diff = ref_image - image
+    diff = ref_hash - hash
     if diff != 0:
         concate_image = concat_images_horizontally(ref_image, image)
         concate_image.save(f"diffs/{i}.png")
